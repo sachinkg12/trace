@@ -1,0 +1,87 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://huggingface.co/datasets/LitTraceQA/LitTraceQA/resolve/main/schema/submission.schema.json",
+  "title": "LitTraceQA participant submission record",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["query_id", "gold_papers", "answer"],
+  "properties": {
+    "query_id": {"type": "string", "minLength": 1},
+    "gold_papers": {
+      "type": "array",
+      "items": {"$ref": "#/$defs/predicted_paper"}
+    },
+    "evidence": {
+      "type": "array",
+      "items": {"$ref": "#/$defs/predicted_evidence"}
+    },
+    "answer": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "freeform": {"$ref": "#/$defs/freeform_answer"},
+        "multiple_choice": {"$ref": "#/$defs/multiple_choice_answer"},
+        "table": {"$ref": "#/$defs/table_answer"}
+      }
+    }
+  },
+  "$defs": {
+    "predicted_paper": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["paper_id"],
+      "properties": {
+        "paper_id": {"type": "string", "minLength": 1}
+      }
+    },
+    "predicted_evidence": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["paper_id", "source_type", "locator"],
+      "properties": {
+        "paper_id": {"type": "string", "minLength": 1},
+        "source_type": {
+          "enum": ["table", "figure", "text_span", "equation_algorithm", "citation_context"]
+        },
+        "locator": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "page": {"type": "integer", "minimum": 1},
+            "table_id": {"type": "string"},
+            "figure_id": {"type": "string"},
+            "section": {"type": "string"},
+            "equation_id": {"type": "string"},
+            "algorithm_id": {"type": "string"},
+            "citation_id": {"type": "string"}
+          }
+        }
+      }
+    },
+    "freeform_answer": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["text"],
+      "properties": {"text": {"type": "string"}}
+    },
+    "multiple_choice_answer": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["gold"],
+      "properties": {
+        "gold": {"type": "string", "pattern": "^[A-Z]?$"}
+      }
+    },
+    "table_answer": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["rows"],
+      "properties": {
+        "rows": {
+          "type": "array",
+          "items": {"type": "object"}
+        }
+      }
+    }
+  }
+}

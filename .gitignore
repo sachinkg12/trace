@@ -1,0 +1,27 @@
+.venv/
+.env
+.env.*
+!.env.example
+__pycache__/
+*.py[cod]
+*.egg-info/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# Benchmark inputs, paper metadata, source PDFs, indexes, and model caches are
+# obtained from their original sources and are never committed here.
+data/
+artifacts/
+outputs/
+tmp/
+*.jsonl
+*.npy
+*.npz
+*.pdf
+*.log
+*.tar
+*.tar.gz
+*.tgz
+*.zip
+

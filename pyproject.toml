@@ -1,0 +1,35 @@
+[build-system]
+requires = ["setuptools>=75", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "trace-littraceqa"
+version = "0.1.0"
+description = "Target-aware retrieval and source-grounded answering for LitTraceQA"
+readme = "README.md"
+requires-python = ">=3.11,<3.14"
+license = {file = "LICENSE"}
+authors = [
+  {name = "Sachin Gupta", email = "sachinkg12@gmail.com"},
+  {name = "Divya Godara", email = "godaradivya@gmail.com"},
+]
+dependencies = [
+  "google-genai==2.16.0",
+  "numpy==2.5.1",
+  "openreview-py==2.4.0",
+  "pymupdf==1.28.0",
+  "pyyaml==6.0.3",
+  "requests==2.34.2",
+  "sentence-transformers==5.6.1",
+]
+
+[project.optional-dependencies]
+test = ["pytest>=8.4,<9"]
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+pythonpath = ["src"]
+testpaths = ["tests"]
+

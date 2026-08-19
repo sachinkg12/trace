@@ -1,0 +1,32 @@
+# Generic full-generation configuration. It consumes no previous predictions,
+# traces, query allowlists, or answer overrides.
+name: trace-littraceqa
+path: new
+seed: 12345
+
+index:
+  paths: {}
+  uris: {}
+
+params:
+  target_aware: true
+  planner_max_attempts: 2
+  selection: answer_bearing
+  property_search_k: 60
+  max_papers: 5
+  select_only: false
+  cascade_stages: []
+  use_dense: true
+
+  table_strategy: planned
+
+  evidence_localizer: llm
+  evidence_max_chars_per_page: 8000
+  evidence_emit_cap: 5
+  evidence_confidence_floor: 0.5
+
+  corpus_pdf_dir: data/pdfs
+  llm_name: gemini
+  llm_model: gemini-2.5-flash
+  vision_model: gemini-2.5-pro
+

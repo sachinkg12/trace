@@ -1,0 +1,25 @@
+{
+  "task": "littraceqa-test",
+  "team_name": "gabby",
+  "status": "official_historical_submission",
+  "composite_score": 0.705669,
+  "metrics": {
+    "paper_precision_macro": 0.9296,
+    "paper_recall_macro": 0.9120,
+    "paper_f1_macro": 0.9164,
+    "evidence_precision_macro": 0.6465,
+    "evidence_recall_macro": 0.7230,
+    "evidence_f1_macro": 0.6570,
+    "multiple_choice_accuracy": 0.9400,
+    "table_row_f1_macro": 0.4351,
+    "table_cell_accuracy_macro": 0.2556,
+    "table_cell_accuracy_micro": 0.3103
+  },
+  "reproducibility_scope": "historical_result_not_an_end_to_end_regeneration_claim",
+  "notes": [
+    "The retrieval/evidence additions and repeat-agreed multiple-choice delta were produced by generic source-grounded policies.",
+    "A later audit found that the preserved table component descended from an earlier test-conditioned runtime.",
+    "This public release contains the generic full-generation architecture and does not contain the earlier conditioned rules or private artifacts."
+  ]
+}
+
