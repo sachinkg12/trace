@@ -183,7 +183,8 @@ def _split_identity_and_qualifiers(
     Parentheses may be identity-bearing (for example a dataset variant), so a
     generic ``strip every parenthetical`` rule is too destructive.  Training
     budgets, steps/NFE, splits, and similar operational constraints are safe to
-    store separately and recover the released q_028 ``ECM-XL`` contract.
+    store separately and recover a compound method-name contract such as
+    ``ECM-XL``.
     """
 
     identity: list[str] = []

@@ -1,42 +1,75 @@
 # TRACE
 
-TRACE (Target-aware Retrieval and Attested Citation Evidence) is the system
-developed by team **gabby** for the GroundLM 2026 LitTraceQA shared task. It
-plans evidence targets, retrieves candidate papers from metadata and parsed PDF
-indexes, localizes source evidence, and emits multiple-choice or structured
-table answers in the official format.
+**Target-Aware Retrieval, Attributed Evidence, and Contract-Constrained
+Extraction for LitTraceQA**
 
-This repository is a clean source release. It contains no benchmark inputs,
-source PDFs, generated predictions, API credentials, per-question rules, or
-leaderboard-derived overrides.
+[Project page](https://sachinkg12.github.io/trace/) ·
+[Reproduction guide](docs/reproduction.md) ·
+[Results](docs/results.md) ·
+[Limitations](docs/limitations.md) ·
+[MIT license](LICENSE)
 
-## Reproducibility scope
+TRACE is team **gabby**'s system for the GroundLM 2026 LitTraceQA shared task.
+It treats scientific question answering as a connected identity problem:
 
-Team gabby's historical submission scored **0.705669**. A later provenance
-audit found that its preserved table component descended from an earlier
-test-conditioned runtime. The new source-owner retrieval and repeat-agreement
-multiple-choice changes were generic, but the complete historical JSONL should
-not be presented as a clean end-to-end regeneration.
+```text
+question contract -> paper set P -> attributed evidence E(P) -> typed answer A
+```
 
-Accordingly, this repository releases the generic full-generation architecture
-and reports the historical result with that limitation. See
-[`docs/results.md`](docs/results.md) and [`docs/limitations.md`](docs/limitations.md).
+The pipeline preserves question targets through retrieval, grounds evidence to
+exact source objects, constructs tables against the organizer schema, and
+validates the complete submission contract before writing an output file.
+
+![TRACE architecture](docs/assets/trace-architecture.svg)
+
+## Official result
+
+The selected clean-track submission scored **0.757968** composite on the
+71-question official test set.
+
+| Component | Score |
+|---|---:|
+| Paper F1 | 0.9728 |
+| Evidence F1 | 0.6847 |
+| Multiple-choice accuracy | 0.9800 |
+| Table row F1 | 0.5185 |
+| Table cell accuracy (macro) | 0.3508 |
+
+The complete vector is machine-readable in
+[`results/official-test-0.757968.json`](results/official-test-0.757968.json).
+A separate historical adaptive artifact reached 0.792252 after repeated
+score-guided diagnosis; it is disclosed in the paper but is not presented as
+the reproducible system.
+
+## What is in this release
+
+This repository contains the generic full-generation architecture, a pinned
+configuration, the official validator, data-fetch and corpus-build utilities,
+tests, and documentation. It contains **no benchmark inputs, paper PDFs,
+generated predictions, credentials, private paths, query allowlists, or
+per-question answer constants**.
+
+The release deliberately exposes no previous-output or replay interface. A run
+starts from the released questions, metadata pool, source PDFs, and indexes.
 
 ## Architecture
 
-1. A question planner extracts named methods, requested properties, source
-   types, cardinality, and table schema targets.
-2. Exact, alias, relation, passage, and dense routes retrieve candidates.
-3. Target-aware coverage and answer-bearing evidence select up to five papers.
-4. PDFs are parsed with PyMuPDF; the evidence localizer emits scorer-compatible
-   table, figure, equation, citation, or text locators.
-5. Answer strategies produce multiple-choice and schema-planned table answers.
-6. The official validator runs before predictions are exposed for submission.
+1. **Contract planning** extracts target papers, requested properties,
+   cardinality, modalities, and the exact answer schema.
+2. **Target-aware retrieval** combines title/alias, sparse passage, relation,
+   source-object, and dense routes without losing target-group identity.
+3. **Paper selection** covers answer targets before spending remaining capacity
+   on answer-bearing evidence.
+4. **Attributed localization** emits scorer-compatible text, table, figure,
+   equation, and citation locators tied to selected papers.
+5. **Contract-constrained answering** produces multiple-choice labels or typed
+   table rows under the supplied schema.
+6. **Fail-closed validation** checks paper-evidence closure, output shape,
+   provenance hashes, and the pinned organizer validator.
 
 ## Installation
 
-Python 3.11--3.13 is supported. Python 3.12.1 was used for the preserved run
-environment.
+Python 3.11–3.13 is supported; the preserved environment used Python 3.12.1.
 
 ```bash
 python3.12 -m venv .venv
@@ -46,11 +79,9 @@ python -m pip install -e '.[test]'
 cp .env.example .env
 ```
 
-Set `GEMINI_API_KEY` in the shell or `.env`. Do not commit `.env`.
+Set `GEMINI_API_KEY` in the shell or local `.env`. Never commit `.env`.
 
 ## Data and indexes
-
-Benchmark annotations are not redistributed. Download the public release:
 
 ```bash
 python scripts/fetch_data.py
@@ -61,9 +92,10 @@ python -m littraceqa.corpus.build_indexes \
   data/parsed data/indexes --pool data/paper_metadata.jsonl
 ```
 
-The first dense run creates `data/cache/pool_emb.npy` using
-`BAAI/bge-small-en-v1.5`. Some OpenReview-hosted PDFs may require
-`OPENREVIEW_TOKEN`. See [`docs/data-and-assets.md`](docs/data-and-assets.md).
+The first dense run creates `data/cache/pool_emb.npy` with
+[`BAAI/bge-small-en-v1.5`](https://huggingface.co/BAAI/bge-small-en-v1.5).
+Some OpenReview PDFs may require a locally supplied `OPENREVIEW_TOKEN`. See
+[`docs/data-and-assets.md`](docs/data-and-assets.md).
 
 ## Full-generation command
 
@@ -81,34 +113,42 @@ python -m littraceqa.experiments.submit \
   --workers 8
 ```
 
-The command performs full generation only. It does not accept a previous
-prediction file as a parent. It verifies the released input/pool/index profile,
-validates all output rows, and writes a hash-bound provenance manifest.
+The command performs full generation only. It verifies the release profile,
+validates all 71 output rows, and writes a hash-bound provenance manifest.
 
-## Models and checkpoints
+## Models
 
 TRACE has no task-specific trained checkpoint.
 
 - Planning, text grounding, and answer generation:
-  `gemini-2.5-flash` through the Google GenAI API.
-- Visual table and figure reading: `gemini-2.5-pro` through the same API.
+  [`gemini-2.5-flash`](https://ai.google.dev/gemini-api/docs/models).
+- Visual table and figure reading:
+  [`gemini-2.5-pro`](https://ai.google.dev/gemini-api/docs/models).
 - Dense metadata embeddings:
   [`BAAI/bge-small-en-v1.5`](https://huggingface.co/BAAI/bge-small-en-v1.5).
 
-For a submission form that requires a checkpoint URL, use this section's URL.
-Hosted API behavior can change over time even with a fixed model identifier.
+Hosted model behavior can change even under a fixed identifier. Temperature
+zero, fixed seeds, pinned code, source hashes, and manifests make differences
+auditable but cannot guarantee identical remote inference bytes.
 
-## Tests
+## Verification
 
 ```bash
 pytest -q
 python -m compileall -q src
 python -m littraceqa.experiments.submit --help
+python scripts/audit_release.py
+python -m pip wheel . --no-deps --no-build-isolation
 ```
 
-## Licenses
+The release audit and its exact checks are documented in
+[`docs/release-audit.md`](docs/release-audit.md).
 
-The original TRACE source code is MIT licensed. The vendored official
-submission validator and LitTraceQA benchmark files are CC BY-NC 4.0. Paper
-metadata and PDFs remain subject to their publishers' terms; PDFs are
-downloaded from original source URLs and are not redistributed here.
+## License and citation
+
+TRACE source is MIT licensed. The vendored organizer validator and LitTraceQA
+benchmark files are CC BY-NC 4.0. Source PDFs remain under their publishers'
+terms and are downloaded from original URLs rather than redistributed.
+
+Please cite the GroundLM 2026 system paper; metadata is provided in
+[`CITATION.cff`](CITATION.cff).

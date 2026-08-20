@@ -72,7 +72,7 @@ def _strip_code_fences(text: str) -> str:
 # the gold cell is "44.5±0.6"; the scorer's `normalize_text` keeps those
 # spaces, so a value the model reads CORRECTLY is zeroed by the spacing alone.
 # Collapse whitespace around ± so a right value matches the gold's shape.
-# (Verified recurring on dev: q_056 DEDA "44.5 ± 0.6" -> gold "44.5±0.6".)
+# (For example, normalize DEDA "44.5 ± 0.6" to "44.5±0.6".)
 _PM_SPACING_RE = re.compile(r"\s*±\s*")
 
 

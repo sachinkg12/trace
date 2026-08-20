@@ -1,0 +1,24 @@
+{
+  "task": "littraceqa-test",
+  "team_name": "gabby",
+  "status": "official_selected_clean_track",
+  "composite_score": 0.757968,
+  "metrics": {
+    "paper_precision_macro": 0.9859,
+    "paper_recall_macro": 0.9683,
+    "paper_f1_macro": 0.9728,
+    "evidence_precision_macro": 0.6594,
+    "evidence_recall_macro": 0.7582,
+    "evidence_f1_macro": 0.6847,
+    "multiple_choice_accuracy": 0.9800,
+    "table_row_f1_macro": 0.5185,
+    "table_cell_accuracy_macro": 0.3508,
+    "table_cell_accuracy_micro": 0.4023
+  },
+  "reproducibility_scope": "generic_full_generation_architecture_without_prediction_replay",
+  "notes": [
+    "The public release contains no submitted predictions, benchmark inputs, source PDFs, credentials, query allowlists, or answer constants.",
+    "Hosted model endpoints can change; manifests and hashes make differences observable but do not guarantee future byte-identical inference.",
+    "The historical 0.792252 adaptive artifact is excluded from the selected reproducible claim and source release."
+  ]
+}

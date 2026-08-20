@@ -1,0 +1,105 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="TRACE: a source-grounded, contract-constrained system for LitTraceQA.">
+  <title>TRACE · LitTraceQA</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header class="site-header">
+    <a class="brand" href="#top" aria-label="TRACE home">
+      <span class="mark">T</span><span>TRACE</span>
+    </a>
+    <nav aria-label="Primary navigation">
+      <a href="#system">System</a>
+      <a href="#results">Results</a>
+      <a href="#reproduce">Reproduce</a>
+      <a href="https://github.com/sachinkg12/trace">GitHub</a>
+    </nav>
+  </header>
+
+  <main id="top">
+    <section class="hero">
+      <div class="eyebrow">GroundLM 2026 · LitTraceQA</div>
+      <h1>Scientific answers need<br><span>a connected trace.</span></h1>
+      <p class="lede">TRACE preserves identity from the question contract to
+        canonical papers, exact source evidence, and schema-valid answers.</p>
+      <div class="actions">
+        <a class="button primary" href="https://github.com/sachinkg12/trace">View source</a>
+        <a class="button secondary" href="https://github.com/sachinkg12/trace/blob/main/docs/reproduction.md">Reproduce the system</a>
+      </div>
+      <div class="trace-strip" aria-label="TRACE identity chain">
+        <div><b>Q</b><span>question contract</span></div><i>→</i>
+        <div><b>P</b><span>paper identities</span></div><i>→</i>
+        <div><b>E(P)</b><span>attributed evidence</span></div><i>→</i>
+        <div><b>A</b><span>typed answer</span></div>
+      </div>
+    </section>
+
+    <section class="section" id="system">
+      <div class="section-heading">
+        <span>01 · System</span>
+        <h2>An identity ledger, not a retrieval shortcut.</h2>
+        <p>Five retrieval routes remain grouped by question target. Evidence is
+          localized independently, and every scorer-visible object must close
+          over the selected paper set.</p>
+      </div>
+      <div class="architecture-card">
+        <img src="assets/trace-architecture.svg" alt="TRACE architecture: contract, paper, evidence, and answer ledgers">
+      </div>
+      <div class="feature-grid">
+        <article><span>01</span><h3>Target-aware retrieval</h3><p>Alias, sparse, relation, object, and dense signals retain target-group provenance.</p></article>
+        <article><span>02</span><h3>Attributed evidence</h3><p>Text, tables, figures, equations, and citations use exact source identities.</p></article>
+        <article><span>03</span><h3>Contract-first tables</h3><p>The observation unit and normalized row key are planned before values are assembled.</p></article>
+        <article><span>04</span><h3>Fail-closed output</h3><p>Paper closure, schemas, hashes, and the official validator gate every artifact.</p></article>
+      </div>
+    </section>
+
+    <section class="section results" id="results">
+      <div class="section-heading">
+        <span>02 · Official test</span>
+        <h2>Selected clean-track result</h2>
+        <p>Team gabby’s 71-question official LitTraceQA submission.</p>
+      </div>
+      <div class="score-grid">
+        <div class="score hero-score"><strong>0.757968</strong><span>composite</span></div>
+        <div class="score"><strong>0.9728</strong><span>paper F1</span></div>
+        <div class="score"><strong>0.6847</strong><span>evidence F1</span></div>
+        <div class="score"><strong>0.9800</strong><span>MC accuracy</span></div>
+        <div class="score"><strong>0.5185</strong><span>table row F1</span></div>
+        <div class="score"><strong>0.3508</strong><span>macro cell accuracy</span></div>
+      </div>
+      <p class="note">A historical 0.792252 adaptive artifact is disclosed for
+        transparency but is not the selected reproducible system.</p>
+    </section>
+
+    <section class="section reproduce" id="reproduce">
+      <div class="section-heading">
+        <span>03 · Reproduction</span>
+        <h2>Clean inputs. Pinned policy. Auditable output.</h2>
+        <p>The public release contains no submitted predictions, benchmark PDFs,
+          credentials, private paths, query allowlists, or answer constants.</p>
+      </div>
+      <div class="steps">
+        <div><b>1</b><h3>Install</h3><code>pip install -e '.[test]'</code></div>
+        <div><b>2</b><h3>Build corpus</h3><code>python scripts/fetch_data.py</code></div>
+        <div><b>3</b><h3>Generate</h3><code>python -m littraceqa.experiments.submit …</code></div>
+        <div><b>4</b><h3>Verify</h3><code>pytest -q</code></div>
+      </div>
+      <div class="callout">
+        <div><h3>Reproducibility boundary</h3><p>Hosted model behavior can
+          change. Fixed seeds, source hashes, manifests, and the pinned
+          validator make those changes visible rather than silently accepted.</p></div>
+        <a href="https://github.com/sachinkg12/trace/blob/main/docs/release-audit.md">Read the release audit →</a>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div><b>TRACE</b><span>Target-Aware Retrieval, Attributed Evidence, and Contract-Constrained Extraction</span></div>
+    <div><a href="https://github.com/sachinkg12/trace">Source</a><a href="https://github.com/sachinkg12/trace/blob/main/docs/results.md">Results</a><a href="https://github.com/sachinkg12/trace/blob/main/docs/limitations.md">Limitations</a></div>
+  </footer>
+</body>
+</html>

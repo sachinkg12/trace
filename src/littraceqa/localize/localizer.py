@@ -32,7 +32,7 @@ _KNOWN_TYPES = {"text_span", "table", "figure", "equation_algorithm", "citation_
 _OBJECT_TYPES = {"table", "figure"}
 _VISIBLE_ID_TYPES = {"equation_algorithm", "citation_context"}
 
-# Four hidden-test forensic misses included two answer-bearing sentences just
+# Some answer-bearing sentences can occur just
 # beyond the old 4,000-character page prefix.  Keep this explicit (and
 # configurable at the composition root) so a dense first column cannot make
 # the second half of a page invisible to the localizer.

@@ -9,8 +9,8 @@ row_key_cols)` (correction #2), so this module groups by that exact tuple
   * CONSTRAINS to `plan.expected_keys` when the question enumerated them, but
     ALIAS/QUALIFIER-TOLERANTLY (correction, proven on public gold): the question
     naming often differs from the printed/gold key -- `ECM-XL (100k iterations)`
-    vs `ECM-XL` (q_028), `AP-BPTT` vs printed `AT-BPTT` (q_056), an UNKNOWN second
-    row-key component (q_025 `Base Model`) that must behave as a wildcard. So a
+    vs `ECM-XL`, `AP-BPTT` vs printed `AT-BPTT`, and an unknown second
+    row-key component that must behave as a wildcard. So a
     row is kept if it matches an expected key up to parenthetical qualifiers,
     prefix, or a single-character typo, with empty expected components matching
     anything. The output row-key is ALWAYS the EXTRACTED PRINTED key (gold follows
@@ -149,7 +149,7 @@ def concise_missing_expected_rows(plan, rows) -> list[dict]:
     so dropping an unextracted but explicit key throws away free row credit.
     Restrict recovery to single-key ENTITY tables, short unqualified labels,
     and at least two missing keys. The last condition avoids turning a single
-    question/source spelling disagreement (public q_056 AP-BPTT vs AT-BPTT)
+    question/source spelling disagreement (for example AP-BPTT vs AT-BPTT)
     into a speculative extra row.
     """
 

@@ -290,8 +290,9 @@ def _build_text_prompt(
 
 def _evidence_line(ev) -> str:
     """One non-visual evidence item rendered with its source type, page and
-    object id -- the object id can BE the answer (q_022 asks for equation IDs
-    that live only in `object_id`), so it must reach the extractor."""
+    object id -- the object id can itself be the requested answer (for example,
+    equation IDs that live only in `object_id`), so it must reach the
+    extractor."""
     tag = f"{ev.source_type} p.{ev.page}"
     if ev.object_id:
         tag += f" ({ev.object_id})"

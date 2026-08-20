@@ -2,6 +2,8 @@ from __future__ import annotations
 
 import json
 from pathlib import Path
+import subprocess
+import sys
 
 from littraceqa.experiments.config import load_config
 from littraceqa.experiments.submit import enforce_strict_release_safety
@@ -56,11 +58,21 @@ def test_fallback_satisfies_the_official_nested_contract():
     )
 
 
-def test_reported_result_is_explicitly_historical():
+def test_reported_result_is_selected_clean_track():
     result = json.loads(
-        (ROOT / "results" / "official-test-0.705669.json").read_text()
+        (ROOT / "results" / "official-test-0.757968.json").read_text()
     )
-    assert result["composite_score"] == 0.705669
-    assert result["status"] == "official_historical_submission"
-    assert "not_an_end_to_end" in result["reproducibility_scope"]
+    assert result["composite_score"] == 0.757968
+    assert result["status"] == "official_selected_clean_track"
+    assert "without_prediction_replay" in result["reproducibility_scope"]
 
+
+def test_public_tree_passes_release_audit():
+    result = subprocess.run(
+        [sys.executable, str(ROOT / "scripts" / "audit_release.py")],
+        cwd=ROOT,
+        check=False,
+        capture_output=True,
+        text=True,
+    )
+    assert result.returncode == 0, result.stdout + result.stderr

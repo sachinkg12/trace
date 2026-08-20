@@ -163,7 +163,7 @@ def target_present(text: str, target: Sequence[Any]) -> bool:
             if len(compact) >= 5 and compact in compact_text:
                 return True
             # Question labels occasionally differ from the printed method by
-            # one character (released q_056: AP-BPTT vs AT-BPTT). Restrict
+            # one character (for example AP-BPTT vs AT-BPTT). Restrict
             # fuzzy recovery to method-like tokens and labels of length >= 5;
             # the two independent readers still gate every accepted value.
             if len(compact) >= 5:

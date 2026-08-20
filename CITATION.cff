@@ -1,6 +1,6 @@
 cff-version: 1.2.0
 message: "If you use TRACE, please cite the GroundLM 2026 system paper."
-title: "TRACE: Target-aware Retrieval and Attested Citation Evidence"
+title: "TRACE: Target-Aware Retrieval, Attributed Evidence, and Contract-Constrained Extraction for LitTraceQA"
 type: software
 version: 0.1.0
 date-released: 2026-08-19
@@ -14,5 +14,5 @@ authors:
     email: godaradivya@gmail.com
     affiliation: Independent Researcher
 repository-code: "https://github.com/sachinkg12/trace"
+url: "https://sachinkg12.github.io/trace/"
 license: MIT
-
