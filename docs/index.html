@@ -76,6 +76,14 @@
           deterministic gate prevents an invalid trace from advancing.</p>
       </div>
       <div class="explorer-shell">
+        <div class="autoplay-bar" aria-label="Low-level architecture walkthrough">
+          <div><span class="detail-kind">Autoplaying component tour</span><b id="architecture-step">01 / 18 · Contract ingress</b></div>
+          <div class="tour-controls">
+            <button type="button" id="architecture-previous">Previous</button>
+            <button type="button" id="architecture-toggle" aria-pressed="false">Pause tour</button>
+            <button type="button" id="architecture-next">Next</button>
+          </div>
+        </div>
         <div class="explorer-tools" id="architecture-stage-buttons" aria-label="Architecture stages"></div>
         <div class="graph-wrap">
           <div id="low-level-graph" aria-label="Interactive TRACE component graph">
@@ -85,7 +93,7 @@
             <span class="detail-kind">Question contract</span>
             <h3>Contract planner</h3>
             <p>Turns the released question into typed targets, requested modalities, cardinality, and the exact answer schema.</p>
-            <dl><div><dt>Consumes</dt><dd>Question, options, schema</dd></div><div><dt>Emits</dt><dd>Targets, roles, constraints</dd></div><div><dt>Gate</dt><dd>Typed plan or conservative fallback</dd></div></dl>
+            <dl><div><dt>Consumes</dt><dd>Question, options, schema</dd></div><div><dt>State</dt><dd>Immutable contract record</dd></div><div><dt>Logic</dt><dd>Parse targets and constraints</dd></div><div><dt>Emits</dt><dd>Targets, roles, constraints</dd></div><div><dt>Fail-closed gate</dt><dd>Typed plan or conservative fallback</dd></div><div><dt>Scorer impact</dt><dd>Prevents invalid answer shape</dd></div></dl>
           </aside>
         </div>
         <p class="graph-hint">Solid edges carry scorer-visible state. Dashed edges are read-only source dependencies.</p>
@@ -93,7 +101,7 @@
       <div class="sequence-section">
         <div class="sequence-heading">
           <div><span>Animated execution trace</span><h3>One question, moving through the frozen policy.</h3></div>
-          <button type="button" id="sequence-toggle" aria-pressed="false">Pause</button>
+          <div class="tour-controls"><button type="button" id="sequence-previous">Previous</button><button type="button" id="sequence-toggle" aria-pressed="false">Pause</button><button type="button" id="sequence-next">Next</button></div>
         </div>
         <div id="sequence-diagram" aria-label="Animated TRACE execution sequence">
           <p class="graph-fallback">Question → plan → retrieve → read sources → localize evidence → assemble answer → validate.</p>
