@@ -1,6 +1,7 @@
-"""Local scoring gate wrapping the official LitTraceQA `vendor/evaluate.py`.
+"""Local scoring gate wrapping the packaged LitTraceQA evaluator primitives.
 
-`vendor/evaluate.py` exposes a top-level `evaluate(gold_records, pred_records)
+`littraceqa._vendor.evaluate` exposes a top-level
+`evaluate(gold_records, pred_records)`
 -> dict` function (as well as a CLI with `--gold`/`--pred` flags that prints
 the same structure as JSON). We call the function directly rather than
 shelling out, since it is available and avoids subprocess/tempfile overhead.
@@ -19,9 +20,9 @@ import pathlib
 from types import ModuleType
 from typing import Protocol, runtime_checkable
 
-# Assumes this file lives at <repo>/src/littraceqa/scorer.py (two levels under
-# the repo root); moving it changes the meaning of parents[2].
-VENDOR = pathlib.Path(__file__).resolve().parents[2] / "vendor" / "evaluate.py"
+# Package the organizer-compatible evaluator beside the validator so both a
+# source checkout and an installed wheel expose the exact normalization seam.
+VENDOR = pathlib.Path(__file__).resolve().parent / "_vendor" / "evaluate.py"
 
 # The exact metric key set emitted by vendor/evaluate.py's evaluate()["metrics"].
 # Single source of truth for the metric contract — tests import this rather than
@@ -74,7 +75,7 @@ _default: Scorer | None = None
 def _get_default() -> Scorer:
     """Lazily construct and cache the default Scorer on first use.
 
-    Constructing `VendoredEvaluateScorer()` touches `vendor/evaluate.py` on
+    Constructing `VendoredEvaluateScorer()` touches the packaged evaluator on
     disk, so it must not happen at import time: other subsystems need to
     `import littraceqa.scorer` for the `Scorer` Protocol / `METRIC_NAMES` / a
     fake scorer without requiring `vendor/evaluate.py` to be present.

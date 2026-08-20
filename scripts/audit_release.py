@@ -41,6 +41,7 @@ REQUIRED = {
     "docs/index.html",
     "docs/assets/trace-architecture.svg",
     "results/official-test-0.760613.json",
+    "src/littraceqa/_vendor/evaluate.py",
     "src/littraceqa/_vendor/validate_submission.py",
 }
 

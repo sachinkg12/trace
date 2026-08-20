@@ -8,6 +8,7 @@ import sys
 from littraceqa.experiments.config import load_config
 from littraceqa.experiments.submit import enforce_strict_release_safety
 from littraceqa.pipeline.input import parse_input_record
+from littraceqa.answer.scorer_contract import coarse_evidence_key, normalize_text
 from littraceqa.submission import build_fallback_line
 from littraceqa.validator import assert_valid_submission
 
@@ -36,6 +37,17 @@ def test_strict_release_refuses_an_external_parent():
         assert "full-generation" in str(exc)
     else:
         raise AssertionError("strict release accepted an external parent")
+
+
+def test_packaged_evaluator_primitives_are_available_at_runtime():
+    assert normalize_text("  A  Printed  Value  ") == "a printed value"
+    assert coarse_evidence_key(
+        {
+            "paper_id": "synthetic_paper",
+            "source_type": "table",
+            "locator": {"page": 4, "table_id": "3"},
+        }
+    ) == ("synthetic_paper", "table", "4", "table 3")
 
 
 def test_fallback_satisfies_the_official_nested_contract():

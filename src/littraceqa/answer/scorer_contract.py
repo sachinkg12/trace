@@ -1,7 +1,7 @@
 """Single coupling point to the official scorer's matching primitives.
 
 The table assembler (row-key normalization) and the evidence-dedup step must
-use the EXACT functions the official `vendor/evaluate.py` uses to match rows
+use the EXACT functions the packaged organizer evaluator uses to match rows
 and evidence -- any divergence silently zeroes a correct prediction. Rather
 than reimplement `normalize_text` / `coarse_evidence_key` (and risk drift),
 we load them from the vendored evaluator through `scorer._load_vendor_module`
