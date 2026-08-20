@@ -48,6 +48,12 @@ tests, and documentation. It contains **no benchmark inputs, paper PDFs,
 generated predictions, credentials, private paths, query allowlists, or
 per-question answer constants**.
 
+The tagged public release is **v1.0.1@6dd7671**. The current `main` branch
+adds documentation only; the audited architecture snapshot is **aa4aecf**, and
+v1.0.1 adds the packaged evaluator runtime contract. These identities make the
+published scope reviewable; they do not turn the separately uploaded test
+prediction file into a public asset.
+
 The release deliberately exposes no previous-output or replay interface. A run
 starts from the released questions, metadata pool, source PDFs, and indexes.
 
@@ -113,15 +119,18 @@ python -m littraceqa.experiments.submit \
 ```
 
 The command performs full generation only. It verifies the release profile,
-validates all 71 output rows, and writes a hash-bound provenance manifest.
+validates all 71 output rows, and writes a trace plus a hash-bound provenance
+manifest. It reproduces the public base architecture, **not** the exact
+composed 0.760613 JSONL: that submission artifact is intentionally not
+distributed, and hosted inference can drift.
 
 ## Models
 
 TRACE has no task-specific trained checkpoint.
 
-- Planning, text grounding, and answer generation:
+- Planning, text grounding, and answer generation (Flash):
   [`gemini-2.5-flash`](https://ai.google.dev/gemini-api/docs/models).
-- Visual table and figure reading:
+- Visual table and figure reading (Pro):
   [`gemini-2.5-pro`](https://ai.google.dev/gemini-api/docs/models).
 - Dense metadata embeddings:
   [`BAAI/bge-small-en-v1.5`](https://huggingface.co/BAAI/bge-small-en-v1.5).
