@@ -7,7 +7,7 @@
   <title>TRACE · LitTraceQA</title>
   <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
   <link rel="stylesheet" href="styles.css">
-  <script defer src="https://cdn.jsdelivr.net/npm/d3@7.9.0/dist/d3.min.js"></script>
+  <script defer src="vendor/d3.v7.min.js"></script>
   <script defer src="app.js"></script>
 </head>
 <body>
@@ -19,7 +19,13 @@
     <nav>
       <a href="#overview"><span>01</span>Overview</a>
       <a href="#architecture"><span>02</span>Architecture</a>
-      <a href="#low-level"><span>03</span>Low-level explorer</a>
+      <a href="#low-level"><span>03</span>Interactive LLD</a>
+      <div class="nav-submenu" aria-label="Interactive architecture views">
+        <button type="button" data-view-target="beginner">Beginner flow</button>
+        <button type="button" data-view-target="components">Component map</button>
+        <button type="button" data-view-target="sequence">Request sequence</button>
+        <button type="button" data-view-target="lessons">Lessons loop</button>
+      </div>
       <a href="#results"><span>04</span>Results</a>
       <a href="#reproduce"><span>05</span>Reproduce</a>
       <a href="#audit"><span>06</span>Release audit</a>
@@ -71,42 +77,80 @@
     <section class="section low-level" id="low-level">
       <div class="section-heading">
         <span>03 · Low-level architecture</span>
-        <h2>Inspect every contract boundary.</h2>
-        <p>Select a stage to see what it consumes, what it emits, and which
-          deterministic gate prevents an invalid trace from advancing.</p>
+        <h2>One system, four levels of explanation.</h2>
+        <p>Begin with the twelve-step story, then inspect every production component,
+          follow a single request across services, or review the shared-task
+          development loop. The last view is explicitly not production inference.</p>
       </div>
-      <div class="explorer-shell">
-        <div class="autoplay-bar" aria-label="Low-level architecture walkthrough">
-          <div><span class="detail-kind">Autoplaying component tour</span><b id="architecture-step">01 / 18 · Contract ingress</b></div>
-          <div class="tour-controls">
-            <button type="button" id="architecture-previous">Previous</button>
-            <button type="button" id="architecture-toggle" aria-pressed="false">Pause tour</button>
-            <button type="button" id="architecture-next">Next</button>
+      <div class="diagram-menu" role="tablist" aria-label="Low-level architecture views">
+        <button type="button" role="tab" aria-selected="true" data-view="beginner"><b>01</b><span>Beginner flow<small>The whole story in plain English</small></span></button>
+        <button type="button" role="tab" aria-selected="false" data-view="components"><b>02</b><span>Component map<small>Every module, contract, and gate</small></span></button>
+        <button type="button" role="tab" aria-selected="false" data-view="sequence"><b>03</b><span>Request sequence<small>One question moving through TRACE</small></span></button>
+        <button type="button" role="tab" aria-selected="false" data-view="lessons"><b>04</b><span>Lessons loop<small>Development history, not inference</small></span></button>
+      </div>
+
+      <div class="diagram-panel is-active" role="tabpanel" data-panel="beginner">
+        <div class="explorer-shell vertical-explorer">
+          <div class="autoplay-bar" aria-label="Beginner architecture walkthrough">
+            <div><span class="detail-kind">Autoplaying guided tour</span><b id="architecture-step">Step 1 of 12 · Gather the paper collection</b></div>
+            <div class="tour-controls">
+              <button type="button" id="architecture-previous">Previous</button>
+              <button type="button" id="architecture-toggle" aria-pressed="false">Pause tour</button>
+              <button type="button" id="architecture-next">Next</button>
+            </div>
+          </div>
+          <div class="flow-progress" aria-hidden="true"><span id="flow-progress-bar"></span></div>
+          <div id="vertical-flow" class="vertical-flow" aria-live="polite">
+            <p class="graph-fallback">The guided flow is loading: gather papers, read PDFs, build indexes, retrieve, select papers, locate evidence, answer, and validate.</p>
           </div>
         </div>
-        <div class="explorer-tools" id="architecture-stage-buttons" aria-label="Architecture stages"></div>
-        <div class="graph-wrap">
-          <div id="low-level-graph" aria-label="Interactive TRACE component graph">
-            <p class="graph-fallback">Question → contract planner → grouped retrieval → paper selection → PDF parsing → evidence localization and table extraction → answer assembly → closure → official validation.</p>
-          </div>
-          <aside class="graph-detail" id="architecture-detail" aria-live="polite">
-            <span class="detail-kind">Question contract</span>
-            <h3>Contract planner</h3>
-            <p>Turns the released question into typed targets, requested modalities, cardinality, and the exact answer schema.</p>
-            <dl><div><dt>Consumes</dt><dd>Question, options, schema</dd></div><div><dt>State</dt><dd>Immutable contract record</dd></div><div><dt>Logic</dt><dd>Parse targets and constraints</dd></div><div><dt>Emits</dt><dd>Targets, roles, constraints</dd></div><div><dt>Fail-closed gate</dt><dd>Typed plan or conservative fallback</dd></div><div><dt>Scorer impact</dt><dd>Prevents invalid answer shape</dd></div></dl>
-          </aside>
-        </div>
-        <p class="graph-hint">Solid edges carry scorer-visible state. Dashed edges are read-only source dependencies.</p>
       </div>
-      <div class="sequence-section">
-        <div class="sequence-heading">
-          <div><span>Animated execution trace</span><h3>One question, moving through the frozen policy.</h3></div>
-          <div class="tour-controls"><button type="button" id="sequence-previous">Previous</button><button type="button" id="sequence-toggle" aria-pressed="false">Pause</button><button type="button" id="sequence-next">Next</button></div>
+
+      <div class="diagram-panel" role="tabpanel" data-panel="components" hidden>
+        <div class="interactive-shell">
+          <div class="diagram-toolbar">
+            <div><span class="detail-kind">D3 production graph</span><b>Public full-generation path · v1.0.1</b></div>
+            <label>Find a component <input id="component-search" type="search" placeholder="planner, evidence, table…"></label>
+            <button type="button" id="component-reset">Reset view</button>
+          </div>
+          <div class="truth-banner"><b>Production only.</b> Deterministic stores and gates surround explicitly marked model-assisted proposal nodes. The graph does not read an earlier prediction or leaderboard result; hosted-model calls can still drift across reruns.</div>
+          <div class="diagram-stage component-stage">
+            <div id="component-map" class="d3-canvas" aria-label="Interactive TRACE production component graph"></div>
+            <aside id="component-detail" class="diagram-detail" aria-live="polite"></aside>
+          </div>
+          <p class="diagram-hint">Drag to pan, scroll to zoom, and select any component for its inputs, logic, outputs, fail-closed gate, scorer effect, and implementation module.</p>
         </div>
-        <div id="sequence-diagram" aria-label="Animated TRACE execution sequence">
-          <p class="graph-fallback">Question → plan → retrieve → read sources → localize evidence → assemble answer → validate.</p>
+      </div>
+
+      <div class="diagram-panel" role="tabpanel" data-panel="sequence" hidden>
+        <div class="interactive-shell">
+          <div class="diagram-toolbar">
+            <div><span class="detail-kind">D3 live sequence</span><b id="sequence-step">Waiting to start</b></div>
+            <div class="tour-controls">
+              <button type="button" id="sequence-previous">Previous</button>
+              <button type="button" id="sequence-toggle" aria-pressed="false">Pause sequence</button>
+              <button type="button" id="sequence-next">Next</button>
+            </div>
+          </div>
+          <div class="truth-banner"><b>Correct runtime order.</b> Preflight happens before model calls; validation happens before the upload path is exposed; trace precedes the atomic prediction write; the manifest is last.</div>
+          <div class="diagram-stage sequence-stage">
+            <div id="request-sequence" class="d3-canvas" aria-label="Autoplaying TRACE request sequence"></div>
+            <aside id="sequence-detail" class="diagram-detail" aria-live="polite"></aside>
+          </div>
         </div>
-        <div class="sequence-status" aria-live="polite"><b id="sequence-step">1 / 8</b><span id="sequence-message">Normalize the released question contract.</span></div>
+      </div>
+
+      <div class="diagram-panel" role="tabpanel" data-panel="lessons" hidden>
+        <div class="interactive-shell lessons-shell">
+          <div class="diagram-toolbar">
+            <div><span class="detail-kind">D3 lessons loop</span><b>How shared-task experiments were evaluated</b></div>
+          </div>
+          <div class="risk-banner"><b>Not production inference.</b> This loop describes development-time source audits and organizer feedback. The public CLI has no replay, parent-prediction, patch, query-allowlist, or answer-override input.</div>
+          <div class="diagram-stage lessons-stage">
+            <div id="lessons-loop" class="d3-canvas" aria-label="TRACE development lessons loop"></div>
+            <aside id="lessons-detail" class="diagram-detail" aria-live="polite"></aside>
+          </div>
+        </div>
       </div>
     </section>
 
@@ -124,8 +168,9 @@
         <div class="score"><strong>0.5423</strong><span>table row F1</span></div>
         <div class="score"><strong>0.3508</strong><span>macro cell accuracy</span></div>
       </div>
-      <p class="note">The paper discusses adaptive diagnosis only as a lesson
-        about scorer-visible identity, not as the selected reproducible result.</p>
+      <p class="note">This score describes the selected clean submission; the
+        public command reproduces the base full-generation architecture, not its
+        non-distributed composed JSONL.</p>
     </section>
 
     <section class="section reproduce" id="reproduce">
@@ -143,18 +188,22 @@
       </div>
       <div class="command-block" aria-label="Full-generation command">
         <div><span></span><span></span><span></span><b>full generation</b></div>
-        <pre><code>export LITTRACEQA_SOURCE_REVISION="$(git rev-parse HEAD)"
+        <pre><code>export GEMINI_API_KEY='your-key'
+export LITTRACEQA_SOURCE_REVISION="$(git rev-parse HEAD)"
 python -m littraceqa.experiments.submit \
   --config configs/trace-littraceqa.yaml \
   --index-dir data/indexes \
   --inputs data/test.jsonl \
   --pool-path data/paper_metadata.jsonl \
-  --output outputs/predictions.jsonl</code></pre>
+  --pool-emb-cache data/cache/pool_emb.npy \
+  --output outputs/predictions.jsonl \
+  --trace-output outputs/traces.jsonl</code></pre>
       </div>
       <div class="callout">
-        <div><h3>Reproducibility boundary</h3><p>Hosted model behavior can
-          change. Fixed seeds, source hashes, manifests, and the pinned
-          validator make those changes visible rather than silently accepted.</p></div>
+        <div><h3>What this command reproduces</h3><p>It reproduces the public
+          full-generation architecture, not the exact composed 0.760613 JSONL.
+          Fetch PDFs, build indexes and the dense cache first; the run emits a
+          trace and hash-bound manifest so hosted-model drift is visible.</p></div>
         <a href="#audit">Read the release audit ↓</a>
       </div>
     </section>
@@ -166,7 +215,7 @@ python -m littraceqa.experiments.submit \
         <p>The exact published commit is checked before it can become a release.</p>
       </div>
       <div class="audit-grid">
-        <article><b>Scope</b><p>Source, configuration, documentation, schema, and tests only.</p></article>
+        <article><b>Scope</b><p>Source, configuration, documentation, schema, and tests only. Public release: v1.0.1@6dd7671; the packaged evaluator fix is included.</p></article>
         <article><b>Privacy</b><p>No credentials, private paths, application material, PDFs, predictions, or archives.</p></article>
         <article><b>Generalization</b><p>No query allowlists, released IDs, answer constants, parent outputs, or replay switches.</p></article>
         <article><b>Behavior</b><p>Full generation, strict parent refusal, official nested contract, and validator checks.</p></article>
