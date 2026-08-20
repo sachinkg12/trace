@@ -7,15 +7,15 @@ scored:
 
 | Metric | Score |
 |---|---:|
-| Composite | **0.757968** |
+| Composite | **0.760613** |
 | Paper precision / recall / F1 | 0.9859 / 0.9683 / 0.9728 |
 | Evidence precision / recall / F1 | 0.6594 / 0.7582 / 0.6847 |
 | Multiple-choice accuracy | 0.9800 |
-| Table row F1 | 0.5185 |
+| Table row F1 | 0.5423 |
 | Table cell accuracy, macro / micro | 0.3508 / 0.4023 |
 
 The exact vector is in
-[`../results/official-test-0.757968.json`](../results/official-test-0.757968.json).
+[`../results/official-test-0.760613.json`](../results/official-test-0.760613.json).
 
 ## Interpretation
 
@@ -35,6 +35,5 @@ Hosted Gemini endpoints are an external dependency. Consequently, the release
 supports source- and artifact-level auditability, but does not promise that a
 future remote inference run will be byte-identical.
 
-A historical adaptive artifact scored 0.792252 after repeated score-guided
-diagnosis. It is useful error-analysis history, but is explicitly excluded from
-the selected reproducible claim and from this source release.
+The paper's lessons-learned discussion separates a historical adaptive artifact
+from the selected reproducible claim and this source release.

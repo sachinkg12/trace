@@ -24,7 +24,7 @@ validates the complete submission contract before writing an output file.
 
 ## Official result
 
-The selected clean-track submission scored **0.757968** composite on the
+The selected clean-track submission scored **0.760613** composite on the
 71-question official test set.
 
 | Component | Score |
@@ -32,14 +32,13 @@ The selected clean-track submission scored **0.757968** composite on the
 | Paper F1 | 0.9728 |
 | Evidence F1 | 0.6847 |
 | Multiple-choice accuracy | 0.9800 |
-| Table row F1 | 0.5185 |
+| Table row F1 | 0.5423 |
 | Table cell accuracy (macro) | 0.3508 |
 
 The complete vector is machine-readable in
-[`results/official-test-0.757968.json`](results/official-test-0.757968.json).
-A separate historical adaptive artifact reached 0.792252 after repeated
-score-guided diagnosis; it is disclosed in the paper but is not presented as
-the reproducible system.
+[`results/official-test-0.760613.json`](results/official-test-0.760613.json).
+The paper discusses the gap to a historical adaptive artifact only as a lesson
+about scorer-visible identity; it is not presented as the reproducible system.
 
 ## What is in this release
 

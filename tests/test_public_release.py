@@ -60,9 +60,9 @@ def test_fallback_satisfies_the_official_nested_contract():
 
 def test_reported_result_is_selected_clean_track():
     result = json.loads(
-        (ROOT / "results" / "official-test-0.757968.json").read_text()
+        (ROOT / "results" / "official-test-0.760613.json").read_text()
     )
-    assert result["composite_score"] == 0.757968
+    assert result["composite_score"] == 0.760613
     assert result["status"] == "official_selected_clean_track"
     assert "without_prediction_replay" in result["reproducibility_scope"]
 

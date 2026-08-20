@@ -40,7 +40,7 @@ REQUIRED = {
     "configs/trace-littraceqa.yaml",
     "docs/index.html",
     "docs/assets/trace-architecture.svg",
-    "results/official-test-0.757968.json",
+    "results/official-test-0.760613.json",
     "src/littraceqa/_vendor/validate_submission.py",
 }
 

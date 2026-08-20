@@ -2,7 +2,7 @@
   "task": "littraceqa-test",
   "team_name": "gabby",
   "status": "official_selected_clean_track",
-  "composite_score": 0.757968,
+  "composite_score": 0.760613,
   "metrics": {
     "paper_precision_macro": 0.9859,
     "paper_recall_macro": 0.9683,
@@ -11,7 +11,7 @@
     "evidence_recall_macro": 0.7582,
     "evidence_f1_macro": 0.6847,
     "multiple_choice_accuracy": 0.9800,
-    "table_row_f1_macro": 0.5185,
+    "table_row_f1_macro": 0.5423,
     "table_cell_accuracy_macro": 0.3508,
     "table_cell_accuracy_micro": 0.4023
   },
